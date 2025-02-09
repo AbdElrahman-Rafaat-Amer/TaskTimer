@@ -10,15 +10,7 @@ struct ContentView: View {
     @StateObject private var timerViewModel = TimerViewModel()
     
     var body: some View {
-        VStack {
-            TextField("Enter Task Name", text: $timerViewModel.taskName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            Text(timerViewModel.formattedTime)
-                .font(.largeTitle)
-                .padding()
-            
+        HStack {
             List(timerViewModel.savedRecords) { record in
                 VStack(alignment: .leading) {
                     Text("Task: \(record.taskName ?? "No Task Name")") // Ensure taskName is not nil
@@ -36,34 +28,41 @@ struct ContentView: View {
                 }
             }
             
-            HStack {
-                Button("Start") {
-                    timerViewModel.startTimer()
-                }
-                .padding()
+            VStack {
+                TextField("Enter Task Name", text: $timerViewModel.taskName)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
                 
-                Button("Pause") {
-                    timerViewModel.pauseTimer()
-                }
-                .padding()
+                Text(timerViewModel.formattedTime)
+                    .font(.largeTitle)
+                    .padding()
                 
-                Button("Stop") {
-                    timerViewModel.stopTimer()
+                HStack {
+                    Button("Start") {
+                        timerViewModel.startTimer()
+                    }
+                    .padding()
+                    
+                    Button("Pause") {
+                        timerViewModel.pauseTimer()
+                    }
+                    .padding()
+                    
+                    Button("Stop") {
+                        timerViewModel.stopTimer()
+                    }
+                    .padding()
+                }
+                
+                Button("Clear All Data") {
+                    timerViewModel.clearAllRecords()
                 }
                 .padding()
+                .foregroundColor(.red)
             }
-            
-            Button("Clear All Data") {
-                           timerViewModel.clearAllRecords()
-                       }
-                       .padding()
-                       .foregroundColor(.red)
+
         }
-        .frame(width: 300, height: 400)
         .padding()
-        .onAppear {
-            timerViewModel.fetchSavedRecords()
-        }
     }
 }
 

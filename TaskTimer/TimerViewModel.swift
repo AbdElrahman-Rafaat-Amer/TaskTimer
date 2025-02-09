@@ -42,9 +42,11 @@ class TimerViewModel: ObservableObject {
     }
     
     func startTimer() {
-        startTime = Date()
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            self.elapsedTime += 1
+        if(startTime == nil){
+            startTime = Date()
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                self.elapsedTime += 1
+            }
         }
     }
     
@@ -59,6 +61,8 @@ class TimerViewModel: ObservableObject {
             let totalTime = elapsedTime
             saveToDatabase(start: start, end: endTime, total: totalTime)
         }
+        startTime = nil
+        timer = nil
         elapsedTime = 0
     }
     
