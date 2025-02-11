@@ -16,6 +16,7 @@ class TimerViewModel: ObservableObject {
     private var timer: Timer?
     private var startTime: Date?
     private var context = PersistenceController.shared.container.viewContext
+    private var isPaused = false
     
     var formattedTime: String {
         return formatTime(elapsedTime)
@@ -47,10 +48,18 @@ class TimerViewModel: ObservableObject {
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                 self.elapsedTime += 1
             }
+        }else{
+            if (isPaused){
+                isPaused = false
+                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                    self.elapsedTime += 1
+                }
+            }
         }
     }
     
     func pauseTimer() {
+        isPaused = true
         timer?.invalidate()
     }
     
@@ -63,6 +72,7 @@ class TimerViewModel: ObservableObject {
         }
         startTime = nil
         timer = nil
+        isPaused = false
         elapsedTime = 0
     }
     
